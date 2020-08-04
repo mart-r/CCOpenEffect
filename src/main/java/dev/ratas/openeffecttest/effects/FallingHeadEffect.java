@@ -30,7 +30,7 @@ public class FallingHeadEffect implements SubEffect {
     @Override
     public void play(Location location) {
         location = location.clone().add(0, yOffset, 0);
-        ArmorStand as = location.getWorld().spawn(location, ArmorStand.class);
+        ArmorStand as = location.getWorld().spawn(location, ArmorStand.class, (e) -> e.setVisible(false));
         // FallingBlock block = location.getWorld().spawnFallingBlock(location, data);
         // block.setDropItem(false);
         as.setVisible(false);

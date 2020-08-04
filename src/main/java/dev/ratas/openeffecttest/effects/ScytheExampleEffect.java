@@ -37,7 +37,6 @@ public class ScytheExampleEffect extends AbstractEffect {
 
     private void addFallingBlockStage(double yOffset) {
         List<SubEffect> stage = new ArrayList<>();
-                                     // JavaPlugin plugin, float anglePer, double fallPer, double fallingDistance, double yOffset) {
         double fallper = 0.15D;
         float rotate = (float) ROTATE * 30F;
         double fallDistance = yOffset;
