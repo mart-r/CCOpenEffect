@@ -16,8 +16,8 @@ public class ScytheEffect implements SubEffect {
     // private static final Particle HANDLE = Particle.DRIP_LAVA;
     // private static final Particle HEAD = Particle.DRIP_WATER;
     // QUICK
-    private static final Particle HANDLE = Particle.WATER_DROP;
-    private static final Particle HEAD = Particle.CURRENT_DOWN;
+    private static final Particle HANDLE = Particle.BUBBLE_COLUMN_UP;
+    private static final Particle HEAD = Particle.COMPOSTER;
     private static final Vector VERTICAL = new Vector(0, 1, 0);
     private final JavaPlugin plugin;
     private final int particlesInHandle;
@@ -26,9 +26,15 @@ public class ScytheEffect implements SubEffect {
     private final double handleIncrement;
     private final double headAngleIncrement;
     private Runnable whenDone;
+    private final double yOffset;
 
     public ScytheEffect(JavaPlugin plugin, int particlesInHandle, double headLength,
             int particlesInHead, Vector handleSpan) {
+        this(plugin, particlesInHandle, headLength, particlesInHead, handleSpan, 0.0);
+    }
+
+    public ScytheEffect(JavaPlugin plugin, int particlesInHandle, double headLength,
+            int particlesInHead, Vector handleSpan, double yOffset) {
         this.plugin = plugin;
         this.particlesInHandle = particlesInHandle;
         this.particlesInHead = particlesInHead;
@@ -38,11 +44,13 @@ public class ScytheEffect implements SubEffect {
         this.direction = handleSpan.normalize();
         // maxAngle = headLength / radius radius = handle length
         this.headAngleIncrement = headLength / handleLength / particlesInHead;
+        this.yOffset = yOffset;
     }
 
     @Override
     public void play(Location location) {
         Location cur = location.clone();
+        cur.add(0, yOffset, 0);
         Vector toAdd = direction.clone().multiply(handleIncrement);
         for (int nr = 0; nr < particlesInHandle; nr++) {
             spawnHandleParticle(cur);
