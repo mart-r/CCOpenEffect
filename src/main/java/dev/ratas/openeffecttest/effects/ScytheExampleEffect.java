@@ -15,13 +15,14 @@ public class ScytheExampleEffect extends AbstractEffect {
 
         Vector vector = new Vector(1, 0, 1);
         double yOffset = 0.0D;
+        double yStep = 0.015;
         double step = 0.015;
         for (int nr = 0; nr < 94; nr++) { // 2^0.5 = 1.41/0.015 = 94.28
             vector = vector.clone();//.multiply(0.99);
             double len = vector.length();
             double newLen = len - step;
             vector = vector.normalize().multiply(newLen);
-            yOffset += 0.01;
+            yOffset += yStep;
             addStagePointedTowards(vector, yOffset);
             vector = vector.rotateAroundY(ROTATE);
         }
@@ -39,8 +40,8 @@ public class ScytheExampleEffect extends AbstractEffect {
                                      // JavaPlugin plugin, float anglePer, double fallPer, double fallingDistance, double yOffset) {
         double fallper = 0.15D;
         float rotate = (float) ROTATE * 30F;
-        double fallDistance = yOffset + 1.75D;
-        stage.add(new FallingHeadEffect(plugin, rotate, fallper, fallDistance, yOffset));
+        double fallDistance = yOffset;
+        stage.add(new FallingHeadEffect(plugin, rotate, fallper, fallDistance, yOffset - 1.75D));
         addStage(stage);
     }
 
