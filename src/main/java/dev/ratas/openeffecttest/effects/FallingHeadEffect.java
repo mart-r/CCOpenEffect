@@ -15,10 +15,6 @@ public class FallingHeadEffect implements SubEffect {
     private int repeated = 0;
     private Runnable whenDone;
 
-    // public FallingHeadEffect(JavaPlugin plugin, float rotate, int repeats, double yOffset) {
-    //     this(plugin, rotate, repeats, yOffset);
-    // }
-
     public FallingHeadEffect(JavaPlugin plugin, float anglePer, double fallPer, double fallingDistance, double yOffset) {
         this.plugin = plugin;
         this.anglePer = anglePer;
@@ -31,14 +27,11 @@ public class FallingHeadEffect implements SubEffect {
     public void play(Location location) {
         location = location.clone().add(0, yOffset, 0);
         ArmorStand as = location.getWorld().spawn(location, ArmorStand.class, (e) -> e.setVisible(false));
-        // FallingBlock block = location.getWorld().spawnFallingBlock(location, data);
-        // block.setDropItem(false);
         as.setVisible(false);
         as.setGravity(false);
         as.setInvulnerable(true);
         as.setBasePlate(false);
         as.getEquipment().setHelmet(new ItemStack(Material.PLAYER_HEAD));
-        // block.
         plugin.getServer().getScheduler().runTaskTimer(plugin, (t) -> {
             if (repeated++ > repeats) {
                 t.cancel();
