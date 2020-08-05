@@ -4,7 +4,7 @@ import org.bukkit.Particle;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-import dev.ratas.openeffecttest.effects.stage.Stage;
+import dev.ratas.openeffecttest.effects.stage.SimpleEffectStage;
 import dev.ratas.openeffecttest.effects.stage.EffectStage;
 import dev.ratas.openeffecttest.effects.sub.FallingHeadEffect;
 import dev.ratas.openeffecttest.effects.sub.ScytheEffect;
@@ -28,7 +28,7 @@ public class ScytheExampleEffect extends AbstractEffect {
         double yStep = 0.015;
         double step = 0.015;
         long delay = 0;
-        EffectStage stage = new Stage(plugin, delay);
+        EffectStage stage = new SimpleEffectStage(plugin, delay);
         for (int nr = 0; nr < 94; nr++) { // 2^0.5 = 1.41/0.015 = 94.28
             vector = vector.clone();//.multiply(0.99);
             double len = vector.length();
@@ -50,7 +50,7 @@ public class ScytheExampleEffect extends AbstractEffect {
 
     private void addFallingBlockStage(double yOffset, long delay) {
         // List<SubEffect> stage = new ArrayList<>();
-        EffectStage stage = new Stage(plugin, delay);
+        EffectStage stage = new SimpleEffectStage(plugin, delay);
         double fallper = 0.15D;
         float rotate = (float) ROTATE * 30F;
         double fallDistance = yOffset;
@@ -70,7 +70,7 @@ public class ScytheExampleEffect extends AbstractEffect {
 
     private void addCircles(long delay) {
         // List<SubEffect> stage1 = new ArrayList<>();
-        EffectStage stage1 = new Stage(plugin, delay);
+        EffectStage stage1 = new SimpleEffectStage(plugin, delay);
         stage1.addEffect(new SpiralEffect(plugin, PARTICLE, RADIUS, SLOPE, PER_CIRCLE, MAX_HEIGHT, WAIT_TIME,
                 PARTICLES_AT_ONCE, Axis.X, AXIS_OFFSET, 0L));
         stage1.addEffect(new SpiralEffect(plugin, PARTICLE, RADIUS, SLOPE, PER_CIRCLE, MAX_HEIGHT, WAIT_TIME,
@@ -83,7 +83,7 @@ public class ScytheExampleEffect extends AbstractEffect {
                 PARTICLES_AT_ONCE, Axis.Z, -AXIS_OFFSET, 0L));
         addStage(stage1);
         // List<SubEffect> stage2 = new ArrayList<>();
-        EffectStage stage2 = new Stage(plugin, delay + 20L); // TODO check
+        EffectStage stage2 = new SimpleEffectStage(plugin, delay + 20L); // TODO check
         stage2.addEffect(new SpiralEffect(plugin, PARTICLE_2, RADIUS * 2, SLOPE * 2, PER_CIRCLE, MAX_HEIGHT, WAIT_TIME,
                 PARTICLES_AT_ONCE, Axis.Y, AXIS_OFFSET, 0L));
         addStage(stage2);

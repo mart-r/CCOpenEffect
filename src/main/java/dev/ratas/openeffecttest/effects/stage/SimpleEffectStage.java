@@ -8,12 +8,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.ratas.openeffecttest.effects.sub.SubEffect;
 
-public class Stage implements EffectStage {
+public class SimpleEffectStage implements EffectStage {
     protected final JavaPlugin plugin;
     private final List<SubEffect> subEffects = new ArrayList<>();
     private final long delay;
 
-    public Stage(JavaPlugin plugin, long delay) {
+    public SimpleEffectStage(JavaPlugin plugin, long delay) {
         this.plugin = plugin;
         this.delay = delay;
     }
