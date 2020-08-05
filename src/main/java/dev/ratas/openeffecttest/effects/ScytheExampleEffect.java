@@ -12,7 +12,7 @@ import dev.ratas.openeffecttest.effects.sub.SpiralEffect;
 import dev.ratas.openeffecttest.effects.sub.SpiralEffect.Axis;
 
 public class ScytheExampleEffect extends AbstractEffect {
-    private static final double ROTATE = 2 * Math.PI / 20;
+    private static final double ROTATE = 2 * Math.PI / 20; // in radians
 
     public ScytheExampleEffect(JavaPlugin plugin) {
         super(plugin);
@@ -43,13 +43,16 @@ public class ScytheExampleEffect extends AbstractEffect {
     }
 
     private void addStagePointedTowards(EffectStage stage, Vector vector, long delay, double yOffset) {
-        stage.addEffect(new ScytheEffect(plugin, 20, 0.6, 10, vector.clone(), delay, yOffset));
+        int particlesInHandler = 20;
+        double headLength = 0.6D;
+        int particlesInHead = 10;
+        stage.addEffect(new ScytheEffect(plugin, particlesInHandler, headLength, particlesInHead, vector.clone(), delay, yOffset));
     }
 
     private void addFallingBlockStage(double yOffset, long delay) {
         EffectStage stage = new SimpleEffectStage(plugin, delay);
         double fallper = 0.15D;
-        float rotate = (float) ROTATE * 30F;
+        float rotate = 15F; // in degrees
         double fallDistance = yOffset;
         yOffset -= 1.75D;
         stage.addEffect(new FallingHeadEffect(plugin, rotate, fallper, fallDistance, yOffset, 0L));
