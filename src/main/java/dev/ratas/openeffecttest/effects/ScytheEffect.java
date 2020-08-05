@@ -48,7 +48,8 @@ public class ScytheEffect implements SubEffect {
     }
 
     @Override
-    public void play(Location location) {
+    public void play(Location location, Runnable whenDone) {
+        this.whenDone = whenDone;
         Location cur = location.clone();
         cur.add(0, yOffset, 0);
         Vector toAdd = direction.clone().multiply(handleIncrement);
@@ -77,11 +78,6 @@ public class ScytheEffect implements SubEffect {
         if (whenDone != null) {
             whenDone.run();
         }
-    }
-
-    @Override
-    public void whenDone(Runnable runnable) {
-        this.whenDone = runnable;
     }
 
 }

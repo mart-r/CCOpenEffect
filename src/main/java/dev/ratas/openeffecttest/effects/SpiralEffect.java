@@ -147,13 +147,9 @@ public class SpiralEffect extends BukkitRunnable implements SubEffect {
     }
 
     @Override
-    public void play(Location location) {
+    public void play(Location location, Runnable whenDone) {
+        this.whenDone = whenDone;
         start(location);
-    }
-
-    @Override
-    public void whenDone(Runnable runnable) {
-        whenDone = runnable;
     }
 
 }

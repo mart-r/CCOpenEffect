@@ -13,7 +13,6 @@ public class FallingHeadEffect implements SubEffect {
     private final double yOffset;
     private final double fallPer;
     private int repeated = 0;
-    private Runnable whenDone;
 
     public FallingHeadEffect(JavaPlugin plugin, float anglePer, double fallPer, double fallingDistance, double yOffset) {
         this.plugin = plugin;
@@ -24,7 +23,7 @@ public class FallingHeadEffect implements SubEffect {
     }
 
     @Override
-    public void play(Location location) {
+    public void play(Location location, Runnable whenDone) {
         location = location.clone().add(0, yOffset, 0);
         ArmorStand as = location.getWorld().spawn(location, ArmorStand.class, (e) -> e.setVisible(false));
         as.setVisible(false);
@@ -47,10 +46,5 @@ public class FallingHeadEffect implements SubEffect {
             as.setRotation(anglePer * repeated, 0.0F);
         }, 1L, 1L);
     }
-
-	@Override
-	public void whenDone(Runnable runnable) {
-		whenDone = runnable;
-	}
     
 }
