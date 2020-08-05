@@ -19,7 +19,7 @@ public class ScytheExampleEffect extends AbstractEffect {
 
         double yOffset = addStageOne();
         addFallingBlockStage(yOffset, 95L);
-        addCircles(95L + 20L); // TODO - check
+        addCircles(95L + 20L);
     }
 
     private double addStageOne() {
@@ -30,7 +30,7 @@ public class ScytheExampleEffect extends AbstractEffect {
         long delay = 0;
         EffectStage stage = new SimpleEffectStage(plugin, delay);
         for (int nr = 0; nr < 94; nr++) { // 2^0.5 = 1.41/0.015 = 94.28
-            vector = vector.clone();//.multiply(0.99);
+            vector = vector.clone();
             double len = vector.length();
             double newLen = len - step;
             vector = vector.normalize().multiply(newLen);
@@ -43,13 +43,10 @@ public class ScytheExampleEffect extends AbstractEffect {
     }
 
     private void addStagePointedTowards(EffectStage stage, Vector vector, long delay, double yOffset) {
-        // List<SubEffect> stage = new ArrayList<>();
-        // EffectStage stage = new Stage(plugin, delay);
         stage.addEffect(new ScytheEffect(plugin, 20, 0.6, 10, vector.clone(), delay, yOffset));
     }
 
     private void addFallingBlockStage(double yOffset, long delay) {
-        // List<SubEffect> stage = new ArrayList<>();
         EffectStage stage = new SimpleEffectStage(plugin, delay);
         double fallper = 0.15D;
         float rotate = (float) ROTATE * 30F;
@@ -69,7 +66,6 @@ public class ScytheExampleEffect extends AbstractEffect {
     private static final double AXIS_OFFSET = 0.5D;
 
     private void addCircles(long delay) {
-        // List<SubEffect> stage1 = new ArrayList<>();
         EffectStage stage1 = new SimpleEffectStage(plugin, delay);
         stage1.addEffect(new SpiralEffect(plugin, PARTICLE, RADIUS, SLOPE, PER_CIRCLE, MAX_HEIGHT, WAIT_TIME,
                 PARTICLES_AT_ONCE, Axis.X, AXIS_OFFSET, 0L));
@@ -82,8 +78,7 @@ public class ScytheExampleEffect extends AbstractEffect {
         stage1.addEffect(new SpiralEffect(plugin, PARTICLE, RADIUS, -SLOPE, PER_CIRCLE, MAX_HEIGHT, WAIT_TIME,
                 PARTICLES_AT_ONCE, Axis.Z, -AXIS_OFFSET, 0L));
         addStage(stage1);
-        // List<SubEffect> stage2 = new ArrayList<>();
-        EffectStage stage2 = new SimpleEffectStage(plugin, delay + 20L); // TODO check
+        EffectStage stage2 = new SimpleEffectStage(plugin, delay + 20L);
         stage2.addEffect(new SpiralEffect(plugin, PARTICLE_2, RADIUS * 2, SLOPE * 2, PER_CIRCLE, MAX_HEIGHT, WAIT_TIME,
                 PARTICLES_AT_ONCE, Axis.Y, AXIS_OFFSET, 0L));
         addStage(stage2);
