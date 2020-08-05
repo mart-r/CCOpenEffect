@@ -1,4 +1,4 @@
-package dev.ratas.openeffecttest.effects;
+package dev.ratas.openeffecttest.effects.sub;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -6,7 +6,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class FallingHeadEffect implements SubEffect {
+public class FallingHeadEffect extends AbstractSubEffect {
     private final JavaPlugin plugin;
     private final float anglePer;
     private final int repeats;
@@ -14,7 +14,8 @@ public class FallingHeadEffect implements SubEffect {
     private final double fallPer;
     private int repeated = 0;
 
-    public FallingHeadEffect(JavaPlugin plugin, float anglePer, double fallPer, double fallingDistance, double yOffset) {
+    public FallingHeadEffect(JavaPlugin plugin, float anglePer, double fallPer, double fallingDistance, double yOffset, long delay) {
+        super(plugin, delay);
         this.plugin = plugin;
         this.anglePer = anglePer;
         this.fallPer = fallPer;
@@ -23,7 +24,7 @@ public class FallingHeadEffect implements SubEffect {
     }
 
     @Override
-    public void play(Location location, Runnable whenDone) {
+    public void play(Location location) {
         location = location.clone().add(0, yOffset, 0);
         ArmorStand as = location.getWorld().spawn(location, ArmorStand.class, (e) -> e.setVisible(false));
         as.setVisible(false);
@@ -35,9 +36,6 @@ public class FallingHeadEffect implements SubEffect {
             if (repeated++ > repeats) {
                 t.cancel();
                 as.remove();
-                if (whenDone != null) {
-                    whenDone.run();
-                }
                 return;
             }
             Location tele = as.getLocation();

@@ -1,4 +1,4 @@
-package dev.ratas.openeffecttest.effects;
+package dev.ratas.openeffecttest.effects.sub;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
-public class SpiralEffect extends BukkitRunnable implements SubEffect {
+public class SpiralEffect extends AbstractSubEffect {
     private final JavaPlugin plugin;
     private final Particle particle;
     private final double radius;
@@ -31,15 +31,15 @@ public class SpiralEffect extends BukkitRunnable implements SubEffect {
     private SpiralState state = SpiralState.START;
     private long until;
     private List<Location> locs = new ArrayList<>();
-    private Runnable whenDone = null;
 
     public SpiralEffect(JavaPlugin plugin, Particle particle, double radius, double slope, int perCircle,
-            double maxHeight, double waitBeforeFade, int particlesAtOnce) {
-        this(plugin, particle, radius, slope, perCircle, maxHeight, waitBeforeFade, particlesAtOnce, Axis.Y, 0.0D);
+            double maxHeight, double waitBeforeFade, int particlesAtOnce, long delay) {
+        this(plugin, particle, radius, slope, perCircle, maxHeight, waitBeforeFade, particlesAtOnce, Axis.Y, 0.0D, delay);
     }
 
     public SpiralEffect(JavaPlugin plugin, Particle particle, double radius, double slope, int perCircle,
-            double maxHeight, double waitBeforeFade, int particlesAtOnce, Axis axis, double axisOffset) {
+            double maxHeight, double waitBeforeFade, int particlesAtOnce, Axis axis, double axisOffset, long delay) {
+        super(plugin, delay);
         if (slope == 0) {
             throw new IllegalArgumentException("This would go on forever!");
         }
@@ -61,18 +61,17 @@ public class SpiralEffect extends BukkitRunnable implements SubEffect {
             startCenter.add(axis == Axis.X ? axisOffset : 0.0D, axis == Axis.Y ? axisOffset : 0.0D,
                     axis == Axis.Z ? axisOffset : 0.0D);
         }
-        runTaskTimer(plugin, 1L, 1L);
+        plugin.getServer().getScheduler().runTaskTimer(plugin, (task) -> run(task), 1L, 1L);
     }
 
-    @Override
-    public void run() {
+    public void run(BukkitTask task) {
         spawnAllParticles();
         if (state == SpiralState.START) {
             addParticle();
         } else if (state == SpiralState.WAIT && until > System.currentTimeMillis()) {
             state = SpiralState.FADE;
         } else if (state == SpiralState.FADE) {
-            remove();
+            remove(task);
         }
     }
 
@@ -132,10 +131,9 @@ public class SpiralEffect extends BukkitRunnable implements SubEffect {
         }
     }
 
-    private void remove() {
+    private void remove(BukkitTask task) {
         locs.clear();
-        cancel();
-        whenDone.run();
+        task.cancel();
     }
 
     public enum SpiralState {
@@ -147,8 +145,7 @@ public class SpiralEffect extends BukkitRunnable implements SubEffect {
     }
 
     @Override
-    public void play(Location location, Runnable whenDone) {
-        this.whenDone = whenDone;
+    public void play(Location location) {
         start(location);
     }
 

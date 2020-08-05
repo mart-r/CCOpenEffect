@@ -4,19 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import dev.ratas.openeffecttest.effects.stage.EffectStage;
 
 public abstract class AbstractEffect implements Effect {
-    private final List<List<SubEffect>> effectStages = new ArrayList<>();
+    protected final JavaPlugin plugin;
+    private final List<EffectStage> effectStages = new ArrayList<>();
 
-    protected void addStage(List<SubEffect> stage) {
+    public AbstractEffect(JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    protected void addStage(EffectStage stage) {
         if (stage == null) {
             throw new IllegalArgumentException("Stage cannot be null");
         }
         if (stage.isEmpty()) {
             throw new IllegalArgumentException("Stage needs effects");
-        }
-        if (stage.contains(null)) {
-            throw new IllegalArgumentException("Sub effect cannot be null");
         }
         effectStages.add(stage);
     }
@@ -26,21 +31,9 @@ public abstract class AbstractEffect implements Effect {
         if (effectStages.isEmpty()) {
             throw new IllegalStateException("No subeffects defined");
         }
-        playSubIfPresent(0, location);
-    }
-
-    protected void playSubIfPresent(int index, Location location) {
-        if (index >= effectStages.size()) {
-            return;
-        }
-        List<SubEffect> subs = effectStages.get(index);
-        for (SubEffect sub : subs) {
-            sub.play(location, () -> {
-                subs.remove(sub);
-                if (subs.isEmpty()) {
-                    playSubIfPresent(index + 1, location);
-                }
-            });
+        for (EffectStage stage : effectStages) {
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> stage.startStage(location),
+                    stage.getStageDelay());
         }
     }
 

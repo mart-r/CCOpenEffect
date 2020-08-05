@@ -1,7 +1,6 @@
 package dev.ratas.openeffecttest;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Player;
@@ -13,7 +12,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.ratas.openeffecttest.effects.Effect;
-import dev.ratas.openeffecttest.effects.ExampleEffect;
 import dev.ratas.openeffecttest.effects.ScytheExampleEffect;
 
 public class EffectActivator implements Listener {
@@ -39,12 +37,7 @@ public class EffectActivator implements Listener {
         if (!player.isSneaking()) {
             return;
         }
-        Effect effect;
-        if (block.getType() == Material.CHEST) {
-            effect = new ExampleEffect(plugin);
-        } else {
-            effect = new ScytheExampleEffect(plugin);
-        }
+        Effect effect = new ScytheExampleEffect(plugin);
         Location loc = block.getLocation();
         loc.add(.5, 1.5, .5); // above block
         effect.play(loc);

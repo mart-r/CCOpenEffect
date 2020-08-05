@@ -1,17 +1,16 @@
-package dev.ratas.openeffecttest.effects;
+package dev.ratas.openeffecttest.effects.sub;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-public class ScytheEffect implements SubEffect {
+public class ScytheEffect extends AbstractSubEffect {
     // offsets
     private static final double OX = 0.0D;
     private static final double OY = 0.0D;
     private static final double OZ = 0.0D;
     private static final int COUNT = 1;
-    private static final long WAIT = 1L;
     // LONG lasting
     // private static final Particle HANDLE = Particle.DRIP_LAVA;
     // private static final Particle HEAD = Particle.DRIP_WATER;
@@ -19,23 +18,21 @@ public class ScytheEffect implements SubEffect {
     private static final Particle HANDLE = Particle.BUBBLE_COLUMN_UP;
     private static final Particle HEAD = Particle.COMPOSTER;
     private static final Vector VERTICAL = new Vector(0, 1, 0);
-    private final JavaPlugin plugin;
     private final int particlesInHandle;
     private final int particlesInHead;
     private final Vector direction;
     private final double handleIncrement;
     private final double headAngleIncrement;
-    private Runnable whenDone;
     private final double yOffset;
 
     public ScytheEffect(JavaPlugin plugin, int particlesInHandle, double headLength,
-            int particlesInHead, Vector handleSpan) {
-        this(plugin, particlesInHandle, headLength, particlesInHead, handleSpan, 0.0);
+            int particlesInHead, Vector handleSpan, long delay) {
+        this(plugin, particlesInHandle, headLength, particlesInHead, handleSpan, delay, 0.0);
     }
 
     public ScytheEffect(JavaPlugin plugin, int particlesInHandle, double headLength,
-            int particlesInHead, Vector handleSpan, double yOffset) {
-        this.plugin = plugin;
+            int particlesInHead, Vector handleSpan, long delay, double yOffset) {
+        super(plugin, delay);
         this.particlesInHandle = particlesInHandle;
         this.particlesInHead = particlesInHead;
         handleSpan = handleSpan.clone();
@@ -48,8 +45,7 @@ public class ScytheEffect implements SubEffect {
     }
 
     @Override
-    public void play(Location location, Runnable whenDone) {
-        this.whenDone = whenDone;
+    public void play(Location location) {
         Location cur = location.clone();
         cur.add(0, yOffset, 0);
         Vector toAdd = direction.clone().multiply(handleIncrement);
@@ -63,7 +59,6 @@ public class ScytheEffect implements SubEffect {
             vec.rotateAroundAxis(VERTICAL, headAngleIncrement);
             cur = location.clone().add(vec);
         }
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> done(), WAIT);
     }
 
     private void spawnHandleParticle(Location loc) {
@@ -72,12 +67,6 @@ public class ScytheEffect implements SubEffect {
 
     private void spawnHeadParticle(Location loc) {
         loc.getWorld().spawnParticle(HEAD, loc, COUNT, OX, OY, OZ, null);
-    }
-
-    private void done() {
-        if (whenDone != null) {
-            whenDone.run();
-        }
     }
 
 }
